@@ -8,6 +8,7 @@ import OrderRow from "../OrderRow";
 import { memo } from "react";
 
 const OrderList = ({ orders, onEditOrder, onDeleteOrder, onViewOrder }) => {
+  console.log("render OrderList");
   if (orders.length === 0) {
     return (
       <Paper p="xl" withBorder>
@@ -41,7 +42,7 @@ const OrderList = ({ orders, onEditOrder, onDeleteOrder, onViewOrder }) => {
               <OrderRow
                 key={row.id}
                 order={row}
-                onEditOrder={(order) => onEditOrder(order)}
+                onEditOrder={onEditOrder}
                 onDeleteOrder={onDeleteOrder}
                 onViewOrder={onViewOrder}
               />

@@ -4,7 +4,6 @@ import {
   formatOrderStatus,
   getStatusColor,
 } from "../../utils/formatters.js";
-import { products } from "../../mockData.js";
 import {
   Modal,
   Text,
@@ -16,6 +15,7 @@ import {
   Grid,
 } from "@mantine/core";
 import { MODAL_SIZE } from "../../constants/orderDetails.js";
+import DetailsGoodsList from "./components/DetailsGoodsList/index.jsx";
 
 const OrderDetails = ({ order, onClose, onEdit }) => {
   if (!order) return null;
@@ -81,36 +81,7 @@ const OrderDetails = ({ order, onClose, onEdit }) => {
         </div>
 
         {/* Товары в заказе */}
-        <div>
-          <Text fw={500} mb="sm">
-            Товары ({order.items.length})
-          </Text>
-          <Stack gap="xs">
-            {order.items.map((item) => {
-              const product = products.find((p) => p.id === item.productId);
-              return (
-                <Paper key={item.productId} p="md" withBorder>
-                  <Group justify="space-between">
-                    <div>
-                      <Text fw={500}>{product?.name}</Text>
-                      <Text size="sm" c="dimmed">
-                        {formatPrice(item.price)} × {item.quantity} шт.
-                      </Text>
-                      {product?.category && (
-                        <Text size="xs" c="dimmed">
-                          {product.category}
-                        </Text>
-                      )}
-                    </div>
-                    <Text fw={600} size="lg">
-                      {formatPrice(item.price * item.quantity)}
-                    </Text>
-                  </Group>
-                </Paper>
-              );
-            })}
-          </Stack>
-        </div>
+        <DetailsGoodsList items={order.items} />
 
         {/* Итого */}
         <Paper p="md" bg="green.0">

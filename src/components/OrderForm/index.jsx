@@ -1,37 +1,17 @@
 import { useState, useEffect } from "react";
-import { products } from "../../mockData.js";
-import { formatPrice } from "../../utils/formatters.js";
-import {
-  Modal,
-  TextInput,
-  Select,
-  Button,
-  Group,
-  Stack,
-  Paper,
-  Text,
-  NumberInput,
-  Divider,
-} from "@mantine/core";
+import { Modal, TextInput, Select, Button, Group, Stack } from "@mantine/core";
 import {
   STATUS_OPTIONS,
   DEFAULT_FORM_STATE,
-  DEFAULT_QUANTITY,
 } from "../../constants/orderForm.js";
 import {
   createUserOptions,
-  createProductOptions,
-  calculateTotalAmount,
   validateForm,
-  addItemToOrder,
-  removeItemFromOrder,
-  updateItemQuantity,
 } from "../../utils/components/orderForm.js";
+import { AddGoods } from "./components/AddGoods/index.jsx";
 
 const OrderForm = ({ order, onSubmit, onCancel }) => {
   const [formData, setFormData] = useState(DEFAULT_FORM_STATE);
-  const [selectedProduct, setSelectedProduct] = useState("");
-  const [quantity, setQuantity] = useState(DEFAULT_QUANTITY);
 
   useEffect(() => {
     if (order) {
@@ -53,32 +33,7 @@ const OrderForm = ({ order, onSubmit, onCancel }) => {
     onSubmit(formData);
   };
 
-  const addItem = () => {
-    if (!selectedProduct) return;
-
-    const product = products.find((p) => p.id === parseInt(selectedProduct));
-    if (!product) return;
-
-    const newItems = addItemToOrder(formData.items, product, quantity);
-    setFormData((prev) => ({ ...prev, items: newItems }));
-
-    setSelectedProduct("");
-    setQuantity(DEFAULT_QUANTITY);
-  };
-
-  const removeItem = (productId) => {
-    const newItems = removeItemFromOrder(formData.items, productId);
-    setFormData((prev) => ({ ...prev, items: newItems }));
-  };
-
-  const handleUpdateItemQuantity = (productId, newQuantity) => {
-    const newItems = updateItemQuantity(formData.items, productId, newQuantity);
-    setFormData((prev) => ({ ...prev, items: newItems }));
-  };
-
   const userOptions = createUserOptions();
-
-  const productOptions = createProductOptions();
 
   console.log("rerender");
 
@@ -109,6 +64,7 @@ const OrderForm = ({ order, onSubmit, onCancel }) => {
           <TextInput
             label="Адрес доставки"
             placeholder="Введите адрес доставки"
+            value={formData.deliveryAddress}
             onChange={(e) =>
               setFormData((prev) => ({
                 ...prev,
@@ -128,103 +84,7 @@ const OrderForm = ({ order, onSubmit, onCancel }) => {
             }
           />
 
-          <div>
-            <Text fw={500} size="sm" mb="xs">
-              Товары *
-            </Text>
-
-            <Group mb="md">
-              <Select
-                placeholder="Выберите товар"
-                data={productOptions}
-                value={selectedProduct}
-                onChange={setSelectedProduct}
-                style={{ flex: 1, minWidth: 200 }}
-              />
-              <NumberInput
-                placeholder="Кол-во"
-                value={quantity}
-                onChange={(value) => setQuantity(value || 1)}
-                min={1}
-                w={80}
-              />
-              <Button onClick={addItem} disabled={!selectedProduct}>
-                Добавить
-              </Button>
-            </Group>
-
-            {formData.items.length === 0 ? (
-              <Paper p="md" withBorder>
-                <Text ta="center" c="dimmed">
-                  Товары не добавлены
-                </Text>
-              </Paper>
-            ) : (
-              <Stack gap="xs">
-                {formData.items.map((item) => {
-                  const product = products.find((p) => p.id === item.productId);
-                  return (
-                    <Paper key={item.productId} p="md" withBorder>
-                      <Group justify="space-between">
-                        <div style={{ flex: 1 }}>
-                          <Text fw={500}>{product?.name}</Text>
-                          <Group gap="xs" align="center">
-                            <Text size="sm" c="dimmed">
-                              {formatPrice(item.price)} ×
-                            </Text>
-                            <NumberInput
-                              value={item.quantity}
-                              onChange={(value) =>
-                                handleUpdateItemQuantity(
-                                  item.productId,
-                                  value || 0,
-                                )
-                              }
-                              min={1}
-                              w={80}
-                              size="xs"
-                            />
-                            <Text size="sm" c="dimmed">
-                              шт.
-                            </Text>
-                          </Group>
-                        </div>
-                        <Group gap="md" align="center">
-                          <Text fw={600} size="lg">
-                            {formatPrice(item.price * item.quantity)}
-                          </Text>
-                          <Button
-                            color="red"
-                            variant="light"
-                            size="xs"
-                            onClick={() => removeItem(item.productId)}
-                          >
-                            Удалить
-                          </Button>
-                        </Group>
-                      </Group>
-                    </Paper>
-                  );
-                })}
-              </Stack>
-            )}
-
-            {formData.items.length > 0 && (
-              <>
-                <Divider my="md" />
-                <Paper p="md" bg="gray.0">
-                  <Group justify="space-between">
-                    <Text fw={600} size="lg">
-                      Общая сумма:
-                    </Text>
-                    <Text fw={700} size="xl" c="green">
-                      {formatPrice(calculateTotalAmount(formData.items))}
-                    </Text>
-                  </Group>
-                </Paper>
-              </>
-            )}
-          </div>
+          <AddGoods formData={formData} setFormData={setFormData} />
 
           <Group justify="flex-end" mt="xl">
             <Button variant="light" onClick={onCancel}>
