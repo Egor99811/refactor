@@ -1,4 +1,3 @@
-import { products } from "../../../../mockData";
 import {
   removeItemFromOrder,
   updateItemQuantity,
@@ -7,7 +6,7 @@ import { formatPrice } from "../../../../utils/formatters";
 import { Paper, Text, Button, Group, Stack, NumberInput } from "@mantine/core";
 import { STATUS_ENUMS } from "../../../../constants/orderForm";
 
-export function GoodsList({ formData, setFormData }) {
+export function GoodsList({ formData, setFormData, products }) {
   const isRowBlocked =
     formData.status === STATUS_ENUMS.DELIVERED ||
     formData.status === STATUS_ENUMS.SHIPPED;

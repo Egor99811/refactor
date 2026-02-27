@@ -1,11 +1,20 @@
 // Константы для компонента OrderForm
+export const STATUS_ENUMS = {
+  PENDING: "pending",
+  PROCESSING: "processing",
+  SHIPPED: "shipped",
+  DELIVERED: "delivered",
+  CANCELLED: "cancelled",
+};
+
+Object.freeze(STATUS_ENUMS);
 
 export const STATUS_OPTIONS = [
-  { value: "pending", label: "Ожидает обработки" },
-  { value: "processing", label: "Обрабатывается" },
-  { value: "shipped", label: "Отправлен" },
-  { value: "delivered", label: "Доставлен" },
-  { value: "cancelled", label: "Отменен" },
+  { value: STATUS_ENUMS.PENDING, label: "Ожидает обработки" },
+  { value: STATUS_ENUMS.PROCESSING, label: "Обрабатывается" },
+  { value: STATUS_ENUMS.SHIPPED, label: "Отправлен" },
+  { value: STATUS_ENUMS.DELIVERED, label: "Доставлен" },
+  { value: STATUS_ENUMS.CANCELLED, label: "Отменен" },
 ];
 
 export const DEFAULT_FORM_STATE = {
@@ -16,13 +25,3 @@ export const DEFAULT_FORM_STATE = {
 };
 
 export const DEFAULT_QUANTITY = 1;
-
-export const STATUS_ENUMS = {
-  PENDING: "pending",
-  PROCESSING: "processing",
-  SHIPPED: "shipped",
-  DELIVERED: "delivered",
-  CANCELLED: "cancelled",
-};
-
-Object.freeze(STATUS_ENUMS);

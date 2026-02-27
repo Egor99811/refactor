@@ -1,64 +1,56 @@
 import { getOrdersWithUserData } from "../../utils/hooks/useOrderUtils";
 import OrderList from "../OrderList";
-import { useMemo, useCallback, useState, memo } from "react";
-import OrderDetails from "../OrderDetails";
+import { useMemo, useCallback, memo } from "react";
 import { OrderReducerActionsEnums } from "../../hooks/useOrders";
 import { getFilteredOrders } from "../../utils/components/orderList";
+import { MODALS_TYPES_ENUMS } from "../../hooks/useModal";
 
-function FilteredOrderList({ orders, filters, dispatch, updateOrder }) {
+function FilteredOrderList({
+  orders,
+  users,
+  filters,
+  dispatchOrder,
+  openModal,
+}) {
   console.log("render FilteredOrderList");
-  const [viewingOrder, setViewingOrder] = useState(null);
 
   const ordersWithUserData = useMemo(
-    () => getOrdersWithUserData(orders),
-    [orders]
+    () => getOrdersWithUserData(orders, users),
+    [orders, users],
   );
 
   const filteredOrders = useMemo(
     () => getFilteredOrders(ordersWithUserData, filters),
-    [ordersWithUserData, filters]
+    [ordersWithUserData, filters],
   );
 
   const handleDeleteOrder = useCallback(
     (orderId) => {
       if (window.confirm("Вы уверены, что хотите удалить этот заказ?")) {
-        dispatch({
+        dispatchOrder({
           type: OrderReducerActionsEnums.DELETE_ORDER,
           payload: orderId,
         });
       }
     },
-    [dispatch]
+    [dispatchOrder],
   );
 
-  const handleEditOrder = useCallback(
+  const handleViewOrder = useCallback(
     (order) => {
-      updateOrder(order);
-      setViewingOrder(null);
+      openModal(order, MODALS_TYPES_ENUMS.DETAILS);
     },
-    [updateOrder, setViewingOrder]
+    [openModal],
   );
-
-  const handleCloseDetails = () => {
-    setViewingOrder(null);
-  };
 
   return (
     <>
       <OrderList
         orders={filteredOrders}
         onDeleteOrder={handleDeleteOrder}
-        onViewOrder={setViewingOrder}
-        onEditOrder={handleEditOrder}
+        onViewOrder={handleViewOrder}
+        onEditOrder={openModal}
       />
-
-      {viewingOrder && (
-        <OrderDetails
-          order={viewingOrder}
-          onClose={handleCloseDetails}
-          onEdit={handleEditOrder}
-        />
-      )}
     </>
   );
 }

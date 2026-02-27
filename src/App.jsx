@@ -12,10 +12,11 @@ import OrderFilters from "./components/OrderFilters";
 import FilteredOrderList from "./components/FilteredOrderList/index.jsx";
 import { useModal } from "./hooks/useModal.jsx";
 import OrderModals from "./components/OrderModals/index.jsx";
-import { orders as initialOrders } from "./mockData.js";
+import { orders as initialOrders, users as initialUsers } from "./mockData.js";
 
 function App() {
   const { orders, dispatchOrder } = useOrders();
+  const [users, setUsers] = useState([]);
   const { modal, openModal, closeModal } = useModal();
   const [filters, setFilters] = useState({
     status: "",
@@ -29,6 +30,7 @@ function App() {
         type: OrderReducerActionsEnums.SET_ORDERS,
         payload: initialOrders,
       });
+      setUsers(initialUsers);
     }, 100); // Симуляция задержки загрузки данных
   }, []);
 
@@ -39,7 +41,11 @@ function App() {
           Управление заказами
         </Title>
 
-        <OrderFilters filters={filters} onFiltersChange={setFilters} />
+        <OrderFilters
+          filters={filters}
+          onFiltersChange={setFilters}
+          users={users}
+        />
 
         <Space h="xl" />
 
@@ -49,6 +55,7 @@ function App() {
 
         <FilteredOrderList
           orders={orders}
+          users={users}
           dispatchOrder={dispatchOrder}
           filters={filters}
           openModal={openModal}

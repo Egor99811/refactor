@@ -1,17 +1,17 @@
-import { users } from '../../mockData.js';
-import { CLIENT_OPTIONS_HEADER } from '../../constants/orderFilters.js';
+import { CLIENT_OPTIONS_HEADER } from "../../constants/orderFilters.js";
 
 /**
  * Создает опции для селекта клиентов
+ * @param {Array} users - Массив пользователей
  * @returns {Array} Массив опций для селекта
  */
-export const createUserOptions = () => {
+export const createUserOptions = (users) => {
   return [
     CLIENT_OPTIONS_HEADER,
-    ...users.map(user => ({ 
-      value: user.id.toString(), 
-      label: user.name 
-    }))
+    ...users.map((user) => ({
+      value: user.id.toString(),
+      label: user.name,
+    })),
   ];
 };
 

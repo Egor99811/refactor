@@ -1,5 +1,3 @@
-import { users, products } from "../../mockData";
-
 // Получение заказа по ID
 export function getOrderById(orders, orderId) {
   return orders.find((order) => order.id === orderId);
@@ -11,7 +9,7 @@ export function getUserOrders(orders, userId) {
 }
 
 // Получение заказов с информацией о пользователе
-export function getOrdersWithUserData(orders) {
+export function getOrdersWithUserData(orders, users) {
   return orders.map((order) => ({
     ...order,
     user: users.find((u) => u.id === order.userId),
@@ -19,7 +17,7 @@ export function getOrdersWithUserData(orders) {
 }
 
 // Получение заказов с полной информацией
-export function getOrdersWithFullDetails(orders) {
+export function getOrdersWithFullDetails(orders, users, products) {
   return orders.map((order) => ({
     ...order,
     user: users.find((u) => u.id === order.userId),

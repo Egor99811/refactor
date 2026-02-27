@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { createProductOptions } from "../../../../utils/components/orderForm";
 import { addItemToOrder } from "../../../../utils/components/orderForm";
-import { products } from "../../../../mockData";
 import { Button, Group, NumberInput, Select } from "@mantine/core";
 import { DEFAULT_QUANTITY } from "../../../../constants/orderForm";
 import { STATUS_ENUMS } from "../../../../constants/orderForm";
 
-export function PickGood({ formData, setFormData }) {
+export function PickGood({ formData, setFormData, products }) {
   const [selectedProduct, setSelectedProduct] = useState("");
   const [quantity, setQuantity] = useState(DEFAULT_QUANTITY);
   const isPeakBlocked =

@@ -3,16 +3,35 @@ import { formatPrice } from "../../../../utils/formatters";
 import { GoodsList } from "../GoodsList";
 import { PickGood } from "../PickGood";
 import { calculateTotalAmount } from "../../../../utils/components/orderForm";
+import { useEffect, useState } from "react";
+import { products as initialProducts } from "../../../../mockData";
+
 export function AddGoods({ formData, setFormData }) {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setProducts(initialProducts);
+    }, 100);
+  }, []);
+
   return (
     <div>
       <Text fw={500} size="sm" mb="xs">
         Товары *
       </Text>
 
-      <PickGood formData={formData} setFormData={setFormData} />
+      <PickGood
+        formData={formData}
+        setFormData={setFormData}
+        products={products}
+      />
 
-      <GoodsList formData={formData} setFormData={setFormData} />
+      <GoodsList
+        formData={formData}
+        setFormData={setFormData}
+        products={products}
+      />
 
       {formData.items.length > 0 && (
         <>

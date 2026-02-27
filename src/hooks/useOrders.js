@@ -1,8 +1,10 @@
 import { useReducer } from "react";
-import { orders as initialOrders } from "../mockData.js";
 
 const orderReducer = (state, action) => {
   switch (action.type) {
+    case "SET_ORDERS": {
+      return action.payload;
+    }
     case "CREATE_ORDER": {
       const orderData = action.payload;
       const orders = state;
@@ -12,7 +14,7 @@ const orderReducer = (state, action) => {
         status: "pending",
         totalAmount: orderData.items.reduce(
           (sum, item) => sum + item.price * item.quantity,
-          0
+          0,
         ),
         ...orderData,
       };
@@ -30,7 +32,7 @@ const orderReducer = (state, action) => {
           if (updates.items) {
             updatedOrder.totalAmount = updates.items.reduce(
               (sum, item) => sum + item.price * item.quantity,
-              0
+              0,
             );
           }
           return updatedOrder;
@@ -46,12 +48,13 @@ const orderReducer = (state, action) => {
 };
 
 export const useOrders = () => {
-  const [orders, dispatch] = useReducer(orderReducer, initialOrders);
+  const [orders, dispatchOrder] = useReducer(orderReducer, []);
 
-  return { orders, dispatch };
+  return { orders, dispatchOrder };
 };
 
 export const OrderReducerActionsEnums = {
+  SET_ORDERS: "SET_ORDERS",
   CREATE_ORDER: "CREATE_ORDER",
   UPDATE_ORDER: "UPDATE_ORDER",
   DELETE_ORDER: "DELETE_ORDER",

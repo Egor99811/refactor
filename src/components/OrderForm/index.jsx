@@ -9,9 +9,19 @@ import {
   validateForm,
 } from "../../utils/components/orderForm.js";
 import { AddGoods } from "./components/AddGoods/index.jsx";
+import { STATUS_ENUMS } from "../../constants/orderForm.js";
+import { users } from "../../mockData.js";
 
 const OrderForm = ({ order, onSubmit, onCancel }) => {
   const [formData, setFormData] = useState(DEFAULT_FORM_STATE);
+  const isAdressBlocked = formData.status === STATUS_ENUMS.DELIVERED;
+  const [userOptions, setUserOptions] = useState([]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setUserOptions(createUserOptions(users));
+    }, 100); // Симуляция задержки загрузки данных
+  }, []);
 
   useEffect(() => {
     if (order) {
@@ -32,8 +42,6 @@ const OrderForm = ({ order, onSubmit, onCancel }) => {
     }
     onSubmit(formData);
   };
-
-  const userOptions = createUserOptions();
 
   console.log("rerender");
 
@@ -64,6 +72,7 @@ const OrderForm = ({ order, onSubmit, onCancel }) => {
           <TextInput
             label="Адрес доставки"
             placeholder="Введите адрес доставки"
+            disabled={isAdressBlocked}
             value={formData.deliveryAddress}
             onChange={(e) =>
               setFormData((prev) => ({
