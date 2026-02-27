@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   MantineProvider,
   Container,
@@ -7,21 +7,30 @@ import {
   Button,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { useOrders } from "./hooks/useOrders.js";
+import { OrderReducerActionsEnums, useOrders } from "./hooks/useOrders.js";
 import OrderFilters from "./components/OrderFilters";
 import FilteredOrderList from "./components/FilteredOrderList/index.jsx";
 import { useModal } from "./hooks/useModal.jsx";
 import OrderModals from "./components/OrderModals/index.jsx";
+import { orders as initialOrders } from "./mockData.js";
 
 function App() {
   const { orders, dispatchOrder } = useOrders();
-
   const { modal, openModal, closeModal } = useModal();
   const [filters, setFilters] = useState({
     status: "",
     userId: "",
     search: "",
   });
+
+  useEffect(() => {
+    setTimeout(() => {
+      dispatchOrder({
+        type: OrderReducerActionsEnums.SET_ORDERS,
+        payload: initialOrders,
+      });
+    }, 100); // Симуляция задержки загрузки данных
+  }, []);
 
   return (
     <MantineProvider>
