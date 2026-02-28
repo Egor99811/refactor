@@ -13,26 +13,15 @@ import { STATUS_ENUMS } from "../../constants/orderForm.js";
 import { users } from "../../mockData.js";
 
 const OrderForm = ({ order, onSubmit, onCancel }) => {
-  const [formData, setFormData] = useState(DEFAULT_FORM_STATE);
-  const isAdressBlocked = formData.status === STATUS_ENUMS.DELIVERED;
+  const [formData, setFormData] = useState(order ?? DEFAULT_FORM_STATE);
   const [userOptions, setUserOptions] = useState([]);
+  const isAdressBlocked = formData.status === STATUS_ENUMS.DELIVERED;
 
   useEffect(() => {
     setTimeout(() => {
       setUserOptions(createUserOptions(users));
     }, 100); // Симуляция задержки загрузки данных
   }, []);
-
-  useEffect(() => {
-    if (order) {
-      setFormData({
-        userId: order.userId,
-        deliveryAddress: order.deliveryAddress,
-        status: order.status,
-        items: [...order.items],
-      });
-    }
-  }, [order]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -82,6 +71,7 @@ const OrderForm = ({ order, onSubmit, onCancel }) => {
             }
             required
             withAsterisk
+            minLength={5}
           />
 
           <Select

@@ -1,14 +1,13 @@
-import { users, products } from '../../mockData.js';
-import { formatPrice } from '../formatters.js';
+import { formatPrice } from "../formatters.js";
 
 /**
  * Создает опции для селекта пользователей
  * @returns {Array} Массив опций для селекта
  */
-export const createUserOptions = () => {
-  return users.map(user => ({
+export const createUserOptions = (users) => {
+  return users.map((user) => ({
     value: user.id.toString(),
-    label: `${user.name} (${user.email})`
+    label: `${user.name} (${user.email})`,
   }));
 };
 
@@ -16,12 +15,12 @@ export const createUserOptions = () => {
  * Создает опции для селекта товаров (только в наличии)
  * @returns {Array} Массив опций для селекта
  */
-export const createProductOptions = () => {
+export const createProductOptions = (products) => {
   return products
-    .filter(p => p.inStock)
-    .map(product => ({
+    .filter((p) => p.inStock)
+    .map((product) => ({
       value: product.id.toString(),
-      label: `${product.name} - ${formatPrice(product.price)}`
+      label: `${product.name} - ${formatPrice(product.price)}`,
     }));
 };
 
@@ -31,7 +30,7 @@ export const createProductOptions = () => {
  * @returns {number} Общая сумма
  */
 export const calculateTotalAmount = (items) => {
-  return items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 };
 
 /**
@@ -40,7 +39,11 @@ export const calculateTotalAmount = (items) => {
  * @returns {boolean} true если форма валидна
  */
 export const validateForm = (formData) => {
-  return !!(formData.userId && formData.deliveryAddress && formData.items.length > 0);
+  return !!(
+    formData.userId &&
+    formData.deliveryAddress &&
+    formData.items.length > 0
+  );
 };
 
 /**
@@ -51,8 +54,10 @@ export const validateForm = (formData) => {
  * @returns {Array} Обновленный список товаров
  */
 export const addItemToOrder = (currentItems, product, quantity) => {
-  const existingItemIndex = currentItems.findIndex(item => item.productId === product.id);
-  
+  const existingItemIndex = currentItems.findIndex(
+    (item) => item.productId === product.id,
+  );
+
   if (existingItemIndex >= 0) {
     // Увеличиваем количество существующего товара
     const newItems = [...currentItems];
@@ -63,7 +68,7 @@ export const addItemToOrder = (currentItems, product, quantity) => {
     const newItem = {
       productId: product.id,
       quantity: quantity,
-      price: product.price
+      price: product.price,
     };
     return [...currentItems, newItem];
   }
@@ -76,7 +81,7 @@ export const addItemToOrder = (currentItems, product, quantity) => {
  * @returns {Array} Обновленный список товаров
  */
 export const removeItemFromOrder = (currentItems, productId) => {
-  return currentItems.filter(item => item.productId !== productId);
+  return currentItems.filter((item) => item.productId !== productId);
 };
 
 /**
@@ -90,10 +95,8 @@ export const updateItemQuantity = (currentItems, productId, newQuantity) => {
   if (newQuantity <= 0) {
     return removeItemFromOrder(currentItems, productId);
   }
-  
-  return currentItems.map(item =>
-    item.productId === productId
-      ? { ...item, quantity: newQuantity }
-      : item
+
+  return currentItems.map((item) =>
+    item.productId === productId ? { ...item, quantity: newQuantity } : item,
   );
 };

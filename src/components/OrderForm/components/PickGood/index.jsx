@@ -25,7 +25,7 @@ export function PickGood({ formData, setFormData, products }) {
     setQuantity(DEFAULT_QUANTITY);
   };
 
-  const productOptions = createProductOptions();
+  const productOptions = createProductOptions(products);
 
   return (
     <Group mb="md">

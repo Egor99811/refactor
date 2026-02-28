@@ -1,9 +1,9 @@
 import { getOrdersWithUserData } from "../../utils/hooks/useOrderUtils";
 import OrderList from "../OrderList";
 import { useMemo, useCallback, memo } from "react";
-import { OrderReducerActionsEnums } from "../../hooks/useOrders";
+import { OrderReducerActionsEnums } from "../../constants/useOrders";
 import { getFilteredOrders } from "../../utils/components/orderList";
-import { MODALS_TYPES_ENUMS } from "../../hooks/useModal";
+import { MODALS_TYPES_ENUMS } from "../../constants/useModal";
 
 function FilteredOrderList({
   orders,

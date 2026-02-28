@@ -9,6 +9,7 @@ import {
 } from "@mantine/core";
 import {
   FILTER_LABELS,
+  FILTERS_TYPES,
   PLACEHOLDERS,
   STATUS_OPTIONS,
 } from "../../constants/orderFilters.js";
@@ -54,7 +55,9 @@ const OrderFilters = ({ filters, onFiltersChange, users }) => {
             label={FILTER_LABELS.SEARCH}
             value={filters.search}
             placeholder={PLACEHOLDERS.SEARCH}
-            onChange={(e) => handleFilterChange("search", e.target.value)}
+            onChange={(e) =>
+              handleFilterChange(FILTERS_TYPES.SEARCH, e.target.value)
+            }
           />
         </Grid.Col>
 
@@ -63,7 +66,9 @@ const OrderFilters = ({ filters, onFiltersChange, users }) => {
             label={FILTER_LABELS.STATUS}
             data={STATUS_OPTIONS}
             value={filters.status}
-            onChange={(value) => handleFilterChange("status", value || "")}
+            onChange={(value) =>
+              handleFilterChange(FILTERS_TYPES.STATUS, value || "")
+            }
             clearable
           />
         </Grid.Col>
@@ -73,7 +78,9 @@ const OrderFilters = ({ filters, onFiltersChange, users }) => {
             label={FILTER_LABELS.CLIENT}
             data={userOptions}
             value={filters.userId}
-            onChange={(value) => handleFilterChange("userId", value || "")}
+            onChange={(value) =>
+              handleFilterChange(FILTERS_TYPES.USER_ID, value || "")
+            }
             clearable
           />
         </Grid.Col>

@@ -1,7 +1,7 @@
 import OrderForm from "../OrderForm";
 import OrderDetails from "../OrderDetails";
-import { MODALS_TYPES_ENUMS } from "../../hooks/useModal";
-import { OrderReducerActionsEnums } from "../../hooks/useOrders";
+import { MODALS_TYPES_ENUMS } from "../../constants/useModal";
+import { OrderReducerActionsEnums } from "../../constants/useOrders";
 
 function OrderModals({ modal, openModal, closeModal, dispatchOrder }) {
   const handleFormSubmit = (formData) => {

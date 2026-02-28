@@ -1,10 +1,5 @@
 import { useCallback, useState } from "react";
-
-export const MODALS_TYPES_ENUMS = {
-  CLOSE: false,
-  FORM: "FORM",
-  DETAILS: "DETAILS",
-};
+import { MODALS_TYPES_ENUMS } from "../constants/useModal";
 
 export function useModal() {
   const [modal, setModal] = useState(MODAL_INITIAL_STATE);

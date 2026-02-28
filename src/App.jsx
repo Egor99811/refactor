@@ -1,23 +1,12 @@
 import { useEffect, useState } from "react";
-import {
-  MantineProvider,
-  Container,
-  Title,
-  Space,
-  Button,
-} from "@mantine/core";
+import { MantineProvider, Container, Title, Space } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { OrderReducerActionsEnums, useOrders } from "./hooks/useOrders.js";
 import OrderFilters from "./components/OrderFilters";
-import FilteredOrderList from "./components/FilteredOrderList/index.jsx";
-import { useModal } from "./hooks/useModal.jsx";
-import OrderModals from "./components/OrderModals/index.jsx";
-import { orders as initialOrders, users as initialUsers } from "./mockData.js";
+import { OrdersModule } from "./components/OrdersModule/index.jsx";
+import { users as us } from "./mockData.js";
 
 function App() {
-  const { orders, dispatchOrder } = useOrders();
   const [users, setUsers] = useState([]);
-  const { modal, openModal, closeModal } = useModal();
   const [filters, setFilters] = useState({
     status: "",
     userId: "",
@@ -26,11 +15,7 @@ function App() {
 
   useEffect(() => {
     setTimeout(() => {
-      dispatchOrder({
-        type: OrderReducerActionsEnums.SET_ORDERS,
-        payload: initialOrders,
-      });
-      setUsers(initialUsers);
+      setUsers(us);
     }, 100); // Симуляция задержки загрузки данных
   }, []);
 
@@ -49,24 +34,7 @@ function App() {
 
         <Space h="xl" />
 
-        <Button color="green" size="md" onClick={() => openModal(null)} mb="xl">
-          + Создать заказ
-        </Button>
-
-        <FilteredOrderList
-          orders={orders}
-          users={users}
-          dispatchOrder={dispatchOrder}
-          filters={filters}
-          openModal={openModal}
-        />
-
-        <OrderModals
-          modal={modal}
-          openModal={openModal}
-          closeModal={closeModal}
-          dispatchOrder={dispatchOrder}
-        />
+        <OrdersModule users={users} filters={filters} />
       </Container>
     </MantineProvider>
   );
