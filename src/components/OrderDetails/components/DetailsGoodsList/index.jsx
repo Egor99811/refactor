@@ -1,8 +1,21 @@
 import { formatPrice } from "../../../../utils/formatters";
 import { Text, Stack, Group, Paper } from "@mantine/core";
-import { products } from "../../../../mockData";
+import { products as p } from "../../../../mockData";
+import { useEffect, useState } from "react";
 
 function DetailsGoodsList({ items }) {
+  const [productsEntity, setProductsEntity] = useState([]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      const entity = {};
+      for (const product of p) {
+        entity[product.id] = product;
+      }
+      setProductsEntity(entity);
+    }, 100); // Симуляция задержки загрузки данных
+  }, []);
+
   return (
     <div>
       <Text fw={500} mb="sm">
@@ -10,7 +23,7 @@ function DetailsGoodsList({ items }) {
       </Text>
       <Stack gap="xs">
         {items.map((item) => {
-          const product = products.find((p) => p.id === item.productId);
+          const product = productsEntity[item.productId];
           return (
             <Paper key={item.productId} p="md" withBorder>
               <Group justify="space-between">

@@ -6,7 +6,7 @@ import { formatPrice } from "../../../../utils/formatters";
 import { Paper, Text, Button, Group, Stack, NumberInput } from "@mantine/core";
 import { STATUS_ENUMS } from "../../../../constants/orderForm";
 
-export function GoodsList({ formData, setFormData, products }) {
+export function GoodsList({ formData, setFormData, productsEntities }) {
   const isRowBlocked =
     formData.status === STATUS_ENUMS.DELIVERED ||
     formData.status === STATUS_ENUMS.SHIPPED;
@@ -32,7 +32,7 @@ export function GoodsList({ formData, setFormData, products }) {
       ) : (
         <Stack gap="xs">
           {formData.items.map((item) => {
-            const product = products.find((p) => p.id === item.productId);
+            const product = productsEntities[item.productId];
             return (
               <Paper key={item.productId} p="md" withBorder>
                 <Group justify="space-between">

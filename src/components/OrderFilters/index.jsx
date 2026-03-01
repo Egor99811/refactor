@@ -19,8 +19,6 @@ import {
 } from "../../utils/components/orderFilters.js";
 
 const OrderFilters = ({ filters, onFiltersChange, users }) => {
-  const userOptions = createUserOptions(users);
-
   const handleFilterChange = (key, value) => {
     onFiltersChange({
       ...filters,
@@ -36,6 +34,7 @@ const OrderFilters = ({ filters, onFiltersChange, users }) => {
     });
   };
 
+  const userOptions = createUserOptions(users);
   const showClearButton = hasActiveFilters(filters);
 
   return (

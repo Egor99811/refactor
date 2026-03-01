@@ -15,7 +15,7 @@ import { users } from "../../mockData.js";
 const OrderForm = ({ order, onSubmit, onCancel }) => {
   const [formData, setFormData] = useState(order ?? DEFAULT_FORM_STATE);
   const [userOptions, setUserOptions] = useState([]);
-  const isAdressBlocked = formData.status === STATUS_ENUMS.DELIVERED;
+  const isAdressBlocked = formData.status === STATUS_ENUMS.DELIVERED; // Блокируем изменение адреса, если заказ уже доставлен
 
   useEffect(() => {
     setTimeout(() => {

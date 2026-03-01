@@ -8,10 +8,16 @@ import { products as initialProducts } from "../../../../mockData";
 
 export function AddGoods({ formData, setFormData }) {
   const [products, setProducts] = useState([]);
+  const [productsEntities, setProductsEntities] = useState({});
 
   useEffect(() => {
     setTimeout(() => {
       setProducts(initialProducts);
+      const entities = {};
+      initialProducts.forEach((product) => {
+        entities[product.id] = product;
+      });
+      setProductsEntities(entities);
     }, 100);
   }, []);
 
@@ -30,7 +36,7 @@ export function AddGoods({ formData, setFormData }) {
       <GoodsList
         formData={formData}
         setFormData={setFormData}
-        products={products}
+        productsEntities={productsEntities}
       />
 
       {formData.items.length > 0 && (
