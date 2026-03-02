@@ -1,23 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { MantineProvider, Container, Title, Space } from "@mantine/core";
 import "@mantine/core/styles.css";
 import OrderFilters from "./components/OrderFilters";
 import { OrdersModule } from "./components/OrdersModule/index.jsx";
-import { users as us } from "./mockData.js";
+import { useUsersStore } from "./state/usersState.jsx";
 
 function App() {
-  const [users, setUsers] = useState([]);
-  const [filters, setFilters] = useState({
-    status: "",
-    userId: "",
-    search: "",
-  });
+  const fetchUsers = useUsersStore((state) => state.fetchUsers);
 
   useEffect(() => {
-    setTimeout(() => {
-      setUsers(us);
-    }, 100); // Симуляция задержки загрузки данных
-  }, []);
+    fetchUsers();
+  }, [fetchUsers]);
 
   return (
     <MantineProvider>
@@ -26,15 +19,11 @@ function App() {
           Управление заказами
         </Title>
 
-        <OrderFilters
-          filters={filters}
-          onFiltersChange={setFilters}
-          users={users}
-        />
+        <OrderFilters />
 
         <Space h="xl" />
 
-        <OrdersModule users={users} filters={filters} />
+        <OrdersModule />
       </Container>
     </MantineProvider>
   );

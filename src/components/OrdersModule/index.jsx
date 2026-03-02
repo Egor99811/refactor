@@ -1,24 +1,21 @@
 import { Button } from "@mantine/core";
-import { useOrders } from "../../hooks/useOrders.js";
 import { useModal } from "../../hooks/useModal.jsx";
 import FilteredOrderList from "../FilteredOrderList/index.jsx";
 import OrderModals from "../OrderModals/index.jsx";
 import { useEffect } from "react";
-import { orders as initialOrders } from "../../mockData.js";
-import { OrderReducerActionsEnums } from "../../constants/useOrders";
+import { useOrdersStore } from "../../state/ordersState.jsx";
 
-export function OrdersModule({ users, filters }) {
-  const { orders, dispatchOrder } = useOrders();
+export function OrdersModule() {
+  console.log("OrdersModule render");
   const { modal, openModal, closeModal } = useModal();
 
+  const fetchOrders = useOrdersStore((state) => state.fetchOrders);
+  const isLoading = useOrdersStore((state) => state.isLoading);
+  const error = useOrdersStore((state) => state.error);
+
   useEffect(() => {
-    setTimeout(() => {
-      dispatchOrder({
-        type: OrderReducerActionsEnums.SET_ORDERS,
-        payload: initialOrders,
-      });
-    }, 100); // Симуляция задержки загрузки данных
-  }, [dispatchOrder]);
+    fetchOrders();
+  }, [fetchOrders]);
 
   return (
     <>
@@ -26,19 +23,18 @@ export function OrdersModule({ users, filters }) {
         + Создать заказ
       </Button>
 
-      <FilteredOrderList
-        orders={orders}
-        users={users}
-        filters={filters}
-        dispatchOrder={dispatchOrder}
-        openModal={openModal}
-      />
+      {isLoading ? (
+        <div>Загрузка заказов...</div>
+      ) : error ? (
+        <div>Ошибка загрузки заказов: {error}</div>
+      ) : (
+        <FilteredOrderList openModal={openModal} />
+      )}
 
       <OrderModals
         modal={modal}
         openModal={openModal}
         closeModal={closeModal}
-        dispatchOrder={dispatchOrder}
       />
     </>
   );

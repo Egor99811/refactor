@@ -1,39 +1,33 @@
 import { getOrdersWithUserData } from "../../utils/hooks/useOrderUtils";
 import OrderList from "../OrderList";
 import { useMemo, useCallback, memo } from "react";
-import { OrderReducerActionsEnums } from "../../constants/useOrders";
 import { getFilteredOrders } from "../../utils/components/orderList";
 import { MODALS_TYPES_ENUMS } from "../../constants/useModal";
+import { useOrdersStore } from "../../state/ordersState.jsx";
+import { useFiltersStore } from "../../state/filtersState.jsx";
+import { FILTERS_TYPES } from "../../constants/orderFilters.js";
+import { useUsersStore } from "../../state/usersState.jsx";
 
-function FilteredOrderList({
-  orders,
-  users,
-  filters,
-  dispatchOrder,
-  openModal,
-}) {
+function FilteredOrderList({ openModal }) {
   console.log("render FilteredOrderList");
+  const status = useFiltersStore((state) => state[FILTERS_TYPES.STATUS]);
+  const userId = useFiltersStore((state) => state[FILTERS_TYPES.USER_ID]);
+  const search = useFiltersStore((state) => state[FILTERS_TYPES.SEARCH]);
+  const orders = useOrdersStore((state) => state.orders);
+  const deleteOrder = useOrdersStore((state) => state.deleteOrder);
+  const users = useUsersStore((state) => state.users);
 
-  const ordersWithUserData = useMemo(
-    () => getOrdersWithUserData(orders, users),
-    [orders, users],
-  );
-
-  const filteredOrders = useMemo(
-    () => getFilteredOrders(ordersWithUserData, filters),
-    [ordersWithUserData, filters],
-  );
+  const filteredOrders = useMemo(() => {
+    const ordersWithUserData = getOrdersWithUserData(orders, users);
+    return getFilteredOrders(ordersWithUserData, { status, userId, search });
+  }, [orders, users, status, userId, search]);
 
   const handleDeleteOrder = useCallback(
     (orderId) => {
-      if (window.confirm("Вы уверены, что хотите удалить этот заказ?")) {
-        dispatchOrder({
-          type: OrderReducerActionsEnums.DELETE_ORDER,
-          payload: orderId,
-        });
-      }
+      if (window.confirm("Вы уверены, что хотите удалить этот заказ?"))
+        deleteOrder(orderId);
     },
-    [dispatchOrder],
+    [deleteOrder],
   );
 
   const handleViewOrder = useCallback(

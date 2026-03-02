@@ -27,3 +27,16 @@ export function getOrdersWithFullDetails(orders, users, products) {
     })),
   }));
 }
+
+export function createOrder(orders, orderData) {
+  return {
+    id: Math.max(...orders.map((o) => o.id)) + 1,
+    orderDate: new Date().toISOString(),
+    status: "pending",
+    totalAmount: orderData.items.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0,
+    ),
+    ...orderData,
+  };
+}

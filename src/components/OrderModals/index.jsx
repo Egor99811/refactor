@@ -2,22 +2,20 @@ import OrderForm from "../OrderForm";
 import OrderDetails from "../OrderDetails";
 import { MODALS_TYPES_ENUMS } from "../../constants/useModal";
 import { OrderReducerActionsEnums } from "../../constants/useOrders";
+import { useOrdersStore } from "../../state/ordersState.jsx";
 
-function OrderModals({ modal, openModal, closeModal, dispatchOrder }) {
+function OrderModals({ modal, openModal, closeModal }) {
+  const createOrder = useOrdersStore((state) => state.createOrder);
+  const updateOrder = useOrdersStore((state) => state.updateOrder);
+
   const handleFormSubmit = (formData) => {
     if (modal.order) {
-      dispatchOrder({
-        type: OrderReducerActionsEnums.UPDATE_ORDER,
-        payload: {
-          id: modal.order.id,
-          updates: formData,
-        },
+      updateOrder({
+        id: modal.order.id,
+        updates: formData,
       });
     } else {
-      dispatchOrder({
-        type: OrderReducerActionsEnums.CREATE_ORDER,
-        payload: formData,
-      });
+      createOrder(formData);
     }
     closeModal();
   };

@@ -17,25 +17,23 @@ import {
   createUserOptions,
   hasActiveFilters,
 } from "../../utils/components/orderFilters.js";
+import { useFiltersStore } from "../../state/filtersState.jsx";
+import { useUsersStore } from "../../state/usersState.jsx";
 
-const OrderFilters = ({ filters, onFiltersChange, users }) => {
+const OrderFilters = () => {
+  const status = useFiltersStore((state) => state[FILTERS_TYPES.STATUS]);
+  const userId = useFiltersStore((state) => state[FILTERS_TYPES.USER_ID]);
+  const search = useFiltersStore((state) => state[FILTERS_TYPES.SEARCH]);
+  const setFilter = useFiltersStore((state) => state.setFilter);
+  const clearFilters = useFiltersStore((state) => state.clearFilters);
+  const users = useUsersStore((state) => state.users);
+
   const handleFilterChange = (key, value) => {
-    onFiltersChange({
-      ...filters,
-      [key]: value,
-    });
-  };
-
-  const clearFilters = () => {
-    onFiltersChange({
-      status: "",
-      userId: "",
-      search: "",
-    });
+    setFilter(key, value);
   };
 
   const userOptions = createUserOptions(users);
-  const showClearButton = hasActiveFilters(filters);
+  const showClearButton = hasActiveFilters({ status, userId, search });
 
   return (
     <Paper p="md" withBorder>
@@ -52,7 +50,7 @@ const OrderFilters = ({ filters, onFiltersChange, users }) => {
         <Grid.Col span={{ base: 12, sm: 4 }}>
           <TextInput
             label={FILTER_LABELS.SEARCH}
-            value={filters.search}
+            value={search}
             placeholder={PLACEHOLDERS.SEARCH}
             onChange={(e) =>
               handleFilterChange(FILTERS_TYPES.SEARCH, e.target.value)
@@ -64,7 +62,7 @@ const OrderFilters = ({ filters, onFiltersChange, users }) => {
           <Select
             label={FILTER_LABELS.STATUS}
             data={STATUS_OPTIONS}
-            value={filters.status}
+            value={status}
             onChange={(value) =>
               handleFilterChange(FILTERS_TYPES.STATUS, value || "")
             }
@@ -76,7 +74,7 @@ const OrderFilters = ({ filters, onFiltersChange, users }) => {
           <Select
             label={FILTER_LABELS.CLIENT}
             data={userOptions}
-            value={filters.userId}
+            value={userId}
             onChange={(value) =>
               handleFilterChange(FILTERS_TYPES.USER_ID, value || "")
             }
