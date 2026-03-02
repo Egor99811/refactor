@@ -8,7 +8,7 @@ export const useOrdersStore = create((set, get) => ({
   isLoading: false,
   error: null,
   setOrders: (orders) => set({ orders }),
-  createOrder: async (order) => {
+  createOrder: (order) => {
     const newOrder = createOrder(get().orders, order);
     const promise = emulateApiCall(newOrder, "Ошибка при создании заказа");
     promise
@@ -19,7 +19,7 @@ export const useOrdersStore = create((set, get) => ({
         console.error("Ошибка при создании заказа:", error);
       });
   },
-  updateOrder: async ({ id, updates }) => {
+  updateOrder: ({ id, updates }) => {
     const index = get().orders.findIndex((order) => order.id === id);
     if (index === -1) {
       console.error("Заказ не найден для обновления:", id);
@@ -55,7 +55,7 @@ export const useOrdersStore = create((set, get) => ({
         console.error("Ошибка удаления заказа:", error);
       });
   },
-  fetchOrders: async () => {
+  fetchOrders: () => {
     set({ isLoading: true });
     const promise = emulateApiCall(
       initialOrders,
