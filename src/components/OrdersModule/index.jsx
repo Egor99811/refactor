@@ -11,6 +11,7 @@ export function OrdersModule() {
 
   const fetchOrders = useOrdersStore((state) => state.fetchOrders);
   const isLoading = useOrdersStore((state) => state.isLoading);
+  const isFullfilled = useOrdersStore((state) => state.isFullfilled);
   const error = useOrdersStore((state) => state.error);
 
   useEffect(() => {
@@ -23,13 +24,9 @@ export function OrdersModule() {
         + Создать заказ
       </Button>
 
-      {isLoading ? (
-        <div>Загрузка заказов...</div>
-      ) : error ? (
-        <div>Ошибка загрузки заказов: {error}</div>
-      ) : (
-        <FilteredOrderList openModal={openModal} />
-      )}
+      {isLoading && <div>Загрузка заказов...</div>}
+      {error && <div>Ошибка загрузки заказов: {error}</div>}
+      {isFullfilled && <FilteredOrderList openModal={openModal} />}
 
       <OrderModals
         modal={modal}

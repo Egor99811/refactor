@@ -4,9 +4,10 @@ import { users as mockUsers } from "../mockData";
 export const useUsersStore = create((set) => ({
   users: [],
   isLoading: false,
+  isFullfilled: false,
 
   setUsers: (users) => set({ users }),
-  fetchUsers: async () => {
+  fetchUsers: () => {
     set({ isLoading: true });
     new Promise((resolve) => {
       setTimeout(() => {
@@ -14,7 +15,7 @@ export const useUsersStore = create((set) => ({
       }, 100); // Симуляция задержки загрузки данных
     })
       .then((data) => {
-        set({ users: data });
+        set({ users: data, isFullfilled: true });
       })
       .catch((error) => {
         console.error("Ошибка загрузки пользователей:", error);
