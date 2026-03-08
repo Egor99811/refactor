@@ -9,6 +9,7 @@ import {
 } from "@mantine/core";
 import {
   FILTER_LABELS,
+  FILTERS_TYPES,
   PLACEHOLDERS,
   STATUS_OPTIONS,
 } from "../../constants/orderFilters.js";
@@ -16,25 +17,23 @@ import {
   createUserOptions,
   hasActiveFilters,
 } from "../../utils/components/orderFilters.js";
+import { useFiltersStore } from "../../state/filtersState.jsx";
+import { useUsersStore } from "../../state/usersState.jsx";
 
-const OrderFilters = ({ filters, onFiltersChange }) => {
+const OrderFilters = () => {
+  const status = useFiltersStore((state) => state[FILTERS_TYPES.STATUS]);
+  const userId = useFiltersStore((state) => state[FILTERS_TYPES.USER_ID]);
+  const search = useFiltersStore((state) => state[FILTERS_TYPES.SEARCH]);
+  const setFilter = useFiltersStore((state) => state.setFilter);
+  const clearFilters = useFiltersStore((state) => state.clearFilters);
+  const users = useUsersStore((state) => state.users);
+
   const handleFilterChange = (key, value) => {
-    onFiltersChange({
-      ...filters,
-      [key]: value,
-    });
+    setFilter(key, value);
   };
 
-  const clearFilters = () => {
-    onFiltersChange({
-      status: "",
-      userId: "",
-      search: "",
-    });
-  };
-
-  const userOptions = createUserOptions();
-  const showClearButton = hasActiveFilters(filters);
+  const userOptions = createUserOptions(users);
+  const showClearButton = hasActiveFilters({ status, userId, search });
 
   return (
     <Paper p="md" withBorder>
@@ -51,9 +50,11 @@ const OrderFilters = ({ filters, onFiltersChange }) => {
         <Grid.Col span={{ base: 12, sm: 4 }}>
           <TextInput
             label={FILTER_LABELS.SEARCH}
-            value={filters.search}
+            value={search}
             placeholder={PLACEHOLDERS.SEARCH}
-            onChange={(e) => handleFilterChange("search", e.target.value)}
+            onChange={(e) =>
+              handleFilterChange(FILTERS_TYPES.SEARCH, e.target.value)
+            }
           />
         </Grid.Col>
 
@@ -61,8 +62,10 @@ const OrderFilters = ({ filters, onFiltersChange }) => {
           <Select
             label={FILTER_LABELS.STATUS}
             data={STATUS_OPTIONS}
-            value={filters.status}
-            onChange={(value) => handleFilterChange("status", value || "")}
+            value={status}
+            onChange={(value) =>
+              handleFilterChange(FILTERS_TYPES.STATUS, value || "")
+            }
             clearable
           />
         </Grid.Col>
@@ -71,8 +74,10 @@ const OrderFilters = ({ filters, onFiltersChange }) => {
           <Select
             label={FILTER_LABELS.CLIENT}
             data={userOptions}
-            value={filters.userId}
-            onChange={(value) => handleFilterChange("userId", value || "")}
+            value={userId}
+            onChange={(value) =>
+              handleFilterChange(FILTERS_TYPES.USER_ID, value || "")
+            }
             clearable
           />
         </Grid.Col>
